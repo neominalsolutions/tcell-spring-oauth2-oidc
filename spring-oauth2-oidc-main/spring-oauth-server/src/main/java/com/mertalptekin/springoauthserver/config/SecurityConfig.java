@@ -118,7 +118,7 @@ public class SecurityConfig {
     // 4. İstemci (client-mvc) uygulamasını tanımla
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        // backend client -> daha gübenli bir ortam çalıştığı için bu clinetlarda clientSecret ->
+        // backend client -> daha güvenli bir ortam çalıştığı için bu clinetlarda clientSecret ->
         // tanımı yapabiliriz.
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("client-mvc-oidc") // İstemci ID
