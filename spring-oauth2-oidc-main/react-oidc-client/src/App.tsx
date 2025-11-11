@@ -21,11 +21,15 @@ const App: React.FC = () => {
 				window.history.replaceState({}, document.title, '/'); // URL temizle
 			}
 
+            // token expire olursa yeni access token alma işlemi
 			userManager.events.addAccessTokenExpired(() => {
 				console.log(
 					'Access token expired, silent renew triggered automatically'
 				);
 
+                // Sunucundan hala logout olmadığımız için, access token yenilemek için yeniden kullanıcıya ait
+                // oturum bilgisini talep etmemiz gerekir.
+                // bu talep sonrası /oauth/token endpoint tetiklenir ve yeni bir accesstoken alırız.
 				// Silent renew sonrası user bilgisini güncelle
 				userManager.getUser().then((data) => {
 					console.log('User after silent renew:', data);
@@ -56,13 +60,6 @@ const App: React.FC = () => {
 			{!user && (
 				<div>
 					<button onClick={login}>Login with OAuth 2.0</button>
-					<button onClick={fetchData}>Fetch Data From Resource Server</button>
-
-					<p>
-						{data
-							? `Fetched Data: ${JSON.stringify(data)}`
-							: 'No data fetched yet.'}
-					</p>
 				</div>
 			)}
 

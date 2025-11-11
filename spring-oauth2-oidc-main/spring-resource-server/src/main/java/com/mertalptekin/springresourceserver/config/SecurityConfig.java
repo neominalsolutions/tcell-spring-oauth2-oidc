@@ -17,6 +17,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+           // clientan gelen isteği iletebilmek için cors ayarlarını açtık.
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS burada etkin
                 .authorizeHttpRequests(auth -> auth
@@ -28,6 +30,9 @@ public class SecurityConfig {
                                 .jwkSetUri("http://localhost:8080/oauth2/jwks") // Auth Server JWKS endpoint
                         )
                 );
+
+        // Resource Serverlar' Auth Server üzerinde jwt validation yapmak için /oauth2/jwks endpointini
+        // kullanırlar.
 
         return http.build();
     }

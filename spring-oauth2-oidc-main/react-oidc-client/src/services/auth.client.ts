@@ -1,6 +1,10 @@
 import { UserManager, WebStorageStateStore, User } from 'oidc-client-ts';
 import { authConfig } from '../config/auth.config';
 
+// WebStorageStateStore -> login olduktan sonraki state bilgilerini tutar
+// User -> Authenticated user
+// UserManager -> login, logout,refreshToken gibi işlemleri yöneten servis
+
 const settings = {
 	authority: authConfig.authority,
 	client_id: authConfig.clientId,
@@ -15,12 +19,14 @@ export const userManager = new UserManager(settings);
 
 // Login başlat
 export const login = async () => {
-	await userManager.signinRedirect();
+	// auth server /login sayfasına gider.
+    await userManager.signinRedirect();
 };
 
 // Callback sonrası kullanıcıyı al
 export const handleCallback = async (): Promise<User | null> => {
-	const user = await userManager.signinRedirectCallback();
+	// signin sonrası authenticated user varsa bilgilerini al.
+    const user = await userManager.signinRedirectCallback();
 	return user;
 };
 
@@ -29,6 +35,7 @@ export const logout = async () => {
 	await userManager.signoutRedirect();
 };
 
+// aktif kullanıcı oturum bilgileri
 export async function getUser() {
 	return await userManager.getUser();
 }
