@@ -30,7 +30,9 @@ public class SecurityConfig {
         // oturum bilgilerini tutumak için ya session kullanıcaz, yada güvenli http only cookie ile yöneteceğiz.
 
         http
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers("api/config/**").permitAll()
+                        .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization ->
                                 authorization

@@ -4,6 +4,15 @@ server:
 
 
 spring:
+  application:
+    name: spring-oauth2-client
+  profiles:
+    active: prod
+  cloud:
+    config:
+      uri: http://localhost:8085
+  config:
+    import: optional:configserver:http://localhost:8085
   security:
     oauth2:
       client:
