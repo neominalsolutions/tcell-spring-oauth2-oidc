@@ -1,6 +1,7 @@
 package com.mertalptekin.springproductservice.controller;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,6 @@ public class HomeController {
     }
 
 
-
-
     @GetMapping
     public String index(){
 
@@ -34,15 +33,12 @@ public class HomeController {
         // config dosyası spring.application.name  -> serviceId çözümlemesi yapıyor.
         ServiceInstance service = discoveryClient.getInstances("spring-order-service").get(0);
 
-
         if(service != null) {
             // localhost ayrımı yapılmalı
             // canlıda service.getUri() üzerinden işlem yapmamız lazım
-            String localHost = "http://" + service.getHost()+ ":" + service.getPort() + "/api/v1";
+                String response = restClient.get().uri(service.getUri() + "/api/v1").retrieve().body(String.class);
+                return "ProductService Get Request " + response;
 
-            String response = restClient.get().uri(localHost).retrieve().body(String.class);
-
-            return "ProductService Get Request " + response;
         }
         else {
             return "Service Not Found";
