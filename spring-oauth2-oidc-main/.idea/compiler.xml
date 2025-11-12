@@ -10,6 +10,7 @@
         <module name="spring-order-service" />
         <module name="spring-resource-server" />
         <module name="spring-cloud-admin" />
+        <module name="spring-eureka-server" />
         <module name="spring-product-service" />
         <module name="spring-config-server" />
         <module name="spring-oauth2-client" />
@@ -29,6 +30,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="spring-cloud-admin" options="-parameters" />
       <module name="spring-config-server" options="-parameters" />
+      <module name="spring-eureka-server" options="-parameters" />
       <module name="spring-oauth-server" options="-parameters" />
       <module name="spring-oauth2-client" options="-parameters" />
       <module name="spring-order-service" options="-parameters" />
