@@ -15,23 +15,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    // form login üzerinden basic username password auth yapılacak.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         // Login sayfasında authenticate olabilmek için bunu açtık.
         // sağlık verilerine sadece Admin client olanlar erişebilsin
-        http.authorizeHttpRequests((requests) -> requests.requestMatchers("/assets/**","/login").permitAll().requestMatchers("/intances","/actuator/**").hasRole("ADMIN_CLIENT").anyRequest().authenticated()).formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
+        // Spring Boot Admin Client, Admin Server’a POST /instances isteği atar.
+        //Bu isteğin gövdesinde kendi bilgisini (url, metadata vs.) gönderir form üzerinden gönderim yaparke csrf ek olarak Request Verification Token bekler bu sebeple POST isteği başarısız olur. Bunu eklememiz gerekir.
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/assets/**","/login").permitAll().requestMatchers("/instances","/actuator/**").permitAll().anyRequest().authenticated()).formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
 
         return http.build();
-    }
-
-
-
-    // InMemory User Details Manager
-    @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails user = User.withUsername("admin").password("{noop}P@ssword1").roles("ADMIN_CLIENT").build();
-        return new InMemoryUserDetailsManager(user);
     }
 
 }
