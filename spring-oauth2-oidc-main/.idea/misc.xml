@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/spring-order-service/pom.xml" />
         <option value="$PROJECT_DIR$/spring-cloud-admin/pom.xml" />
         <option value="$PROJECT_DIR$/spring-eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-gateway-service/pom.xml" />
       </list>
     </option>
   </component>

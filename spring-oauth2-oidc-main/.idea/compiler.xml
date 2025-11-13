@@ -11,6 +11,7 @@
         <module name="spring-resource-server" />
         <module name="spring-cloud-admin" />
         <module name="spring-eureka-server" />
+        <module name="spring-gateway-service" />
         <module name="spring-product-service" />
         <module name="spring-config-server" />
         <module name="spring-oauth2-client" />
@@ -31,6 +32,7 @@
       <module name="spring-cloud-admin" options="-parameters" />
       <module name="spring-config-server" options="-parameters" />
       <module name="spring-eureka-server" options="-parameters" />
+      <module name="spring-gateway-service" options="-parameters" />
       <module name="spring-oauth-server" options="-parameters" />
       <module name="spring-oauth2-client" options="-parameters" />
       <module name="spring-order-service" options="-parameters" />

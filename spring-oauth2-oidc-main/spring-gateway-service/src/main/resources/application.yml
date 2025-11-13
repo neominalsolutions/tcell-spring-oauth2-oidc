@@ -1,0 +1,40 @@
+
+server:
+  port: 5010
+
+spring:
+  application:
+    name: spring-gateway-service
+
+# localhost:5002/api/v1/orders, # Eureka Server
+# /api/v1/orders
+# localhost:5001/api/v1/products
+# /api/v1/products
+# SADECE GET ve POST Methodlar?na izin ver.
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: orderClient
+              uri: lb://spring-order-service
+              predicates:
+                - Path=/order-service/api/v1/**
+              filters:
+                - StripPrefix=1
+                - AddRequestHeader=X-Client, OrderClient
+
+            - id: productClient
+              uri: lb://spring-product-service
+              predicates:
+                - Path=/product-service/api/v1/**
+              filters:
+                - StripPrefix=1
+                - AddRequestHeader=X-Client, ProductClient
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
