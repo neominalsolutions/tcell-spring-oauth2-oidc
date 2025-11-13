@@ -10,19 +10,44 @@ import java.util.function.Consumer;
 @Component
 public class SubmitOrderConsumer {
 
+    @Bean
+    public Consumer<Message<String>> stockOut(){
+        return message -> {
+            String payload = message.getPayload();
+            var Headers = message.getHeaders();
+
+            System.out.println("stockOut "  + payload);
+
+        };
+    }
+
+    @Bean
+    public Consumer<Message<String>> doShipment(){
+        return message -> {
+            String payload = message.getPayload();
+            var Headers = message.getHeaders();
+
+            System.out.println("doShipment "  + payload);
+
+            // consume ederken mesajda bir hata olması durumunda DLQ ile mesajı yedekliyoruz. Farklı bir topic taşıyoruz.
+            if(payload.contains("fail")){
+                throw new RuntimeException("Shipping Process Error");
+            }
 
 
-    // Not: spring.cloud.function.definition=submitOrderEvent
-    // function ismi ile eşleşmeli
-//    @Bean
-//    public Consumer<Message<String>> submitOrderEvent(){
-//         return message -> {
-//            String payload = message.getPayload();
-//            var Headers = message.getHeaders();
-//
-//            System.out.println("payload"  + payload);
-//
-//         };
-//    }
+        };
+    }
+
+    @Bean
+    public Consumer<Message<String>> doPayment(){
+        return message -> {
+            String payload = message.getPayload();
+            var Headers = message.getHeaders();
+
+            System.out.println("doPayment "  + payload);
+
+        };
+    }
+
 
 }
