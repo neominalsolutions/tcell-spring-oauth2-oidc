@@ -1,9 +1,8 @@
 package com.mertalptekin.springorderservice.controller;
 
+import com.mertalptekin.springorderservice.dtos.GetOrderRequest;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1")
@@ -15,8 +14,14 @@ public class HomeController {
 
 
 
-    @GetMapping
-    public String index() {
+    @PostMapping
+    public String index(@RequestBody GetOrderRequest request) {
+
+        // arka arka yapılan hatalı isteklerde circuit braker devreye girsin test etmek istiyoruz.
+        if(request.payload().contains("fail")){
+            throw  new RuntimeException("İstek yapılırken hata meydana geldi");
+        }
+
         return  "Request From Home Controller";
     }
 }

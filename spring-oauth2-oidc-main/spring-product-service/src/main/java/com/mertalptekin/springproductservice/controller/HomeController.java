@@ -2,12 +2,13 @@ package com.mertalptekin.springproductservice.controller;
 
 
 import com.mertalptekin.springproductservice.client.OrderClient;
+import com.mertalptekin.springproductservice.dtos.GetOrderRequest;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -27,11 +28,20 @@ public class HomeController {
         this.orderClient = orderClient;
     }
 
-    @GetMapping("/openFeign")
-    public String openFeign(){
-        return "call OrderService GET:" + this.orderClient.getOrderedRequest();
+    // Recilency4j ye client to client haberleşmesi olduğu yerlerde sadece ihtiyaç var.
+
+    @PostMapping("/openFeign")
+//    @CircuitBreaker(name = "orderService",fallbackMethod = "circuitBrakerFallback")
+    @Retry(name = "orderService")
+    public String openFeign(@RequestBody GetOrderRequest request){
+        return "call OrderService GET:" + this.orderClient.getOrderedRequest(request);
     }
 
+
+    // Hata durumunda geri dönüş yapacağımız method.
+    public  String circuitBrakerFallback(Throwable t){
+        return "Circuit Braker Fallback " + t.getMessage();
+    }
 
     @GetMapping
     public String index(){
