@@ -3,14 +3,20 @@ package com.mertalptekin.springproductservice.controller;
 
 import com.mertalptekin.springproductservice.client.OrderClient;
 import com.mertalptekin.springproductservice.dtos.GetOrderRequest;
+import com.mertalptekin.springproductservice.service.ProductService;
+import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 
+import java.net.ConnectException;
 import java.util.List;
 
 
@@ -20,26 +26,33 @@ public class HomeController {
 
     private final DiscoveryClient discoveryClient;
     private final RestClient restClient;
-    private final OrderClient orderClient;
+    private final ProductService productService;
 
-    public HomeController(DiscoveryClient discoveryClient, RestClient.Builder restClientBuilder, OrderClient orderClient){
+    public HomeController(DiscoveryClient discoveryClient, RestClient.Builder restClientBuilder, ProductService productService){
         this.discoveryClient = discoveryClient;
         this.restClient = restClientBuilder.build();
-        this.orderClient = orderClient;
+        this.productService = productService;
     }
 
     // Recilency4j ye client to client haberleşmesi olduğu yerlerde sadece ihtiyaç var.
 
-    @Retry(name = "orderService",fallbackMethod = "retryFallback")
+
     @PostMapping("/openFeign")
-    public String openFeign(@RequestBody GetOrderRequest request){
-        return "call OrderService GET:" + orderClient.getOrderedRequest(request);
+    @RateLimiter(name = "orderServiceRateLimiter",fallbackMethod = "rateLimiter")
+    public ResponseEntity<String> openFeign(@RequestBody GetOrderRequest request) {
+        var response = productService.GetOrderedProduct(request);
+        return  ResponseEntity.ok(response);
     }
 
 
-    public String retryFallback(GetOrderRequest request, Throwable t) {
-        return "RetryFallback" + t.getMessage();
-    }
+    public ResponseEntity<String> rateLimiter(@RequestBody GetOrderRequest request, Throwable t)  {
+        // logger
+        // hata dışında eğer veri cachledeye response son güncel cache üzerinden döner.
+        // Çok falza istek atıldı status code
+        return new ResponseEntity<>(HttpStatusCode.valueOf(429));
+
+    };
+
 
     @GetMapping
     public String index(){
