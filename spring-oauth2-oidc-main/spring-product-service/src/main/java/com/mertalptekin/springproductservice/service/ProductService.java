@@ -9,6 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+// Not:   <dependency>
+//            <groupId>org.springframework.boot</groupId>
+//            <artifactId>spring-boot-starter-aop</artifactId>
+//        </dependency>
+
+// yukarıdaki dependecy olmadan fallbackMethod tetikleniyor eklemeyi unutmayalım.
+
 @Service
 public class ProductService {
 
@@ -17,7 +24,6 @@ public class ProductService {
     public ProductService(OrderClient orderClient){
         this.orderClient = orderClient;
     }
-
 
 
     @Retry(name = "orderServiceRetry", fallbackMethod = "retry")
