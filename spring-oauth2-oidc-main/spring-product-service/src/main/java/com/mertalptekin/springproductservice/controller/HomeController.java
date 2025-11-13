@@ -30,17 +30,15 @@ public class HomeController {
 
     // Recilency4j ye client to client haberleşmesi olduğu yerlerde sadece ihtiyaç var.
 
+    @Retry(name = "orderService",fallbackMethod = "retryFallback")
     @PostMapping("/openFeign")
-//    @CircuitBreaker(name = "orderService",fallbackMethod = "circuitBrakerFallback")
-    @Retry(name = "orderService")
     public String openFeign(@RequestBody GetOrderRequest request){
-        return "call OrderService GET:" + this.orderClient.getOrderedRequest(request);
+        return "call OrderService GET:" + orderClient.getOrderedRequest(request);
     }
 
 
-    // Hata durumunda geri dönüş yapacağımız method.
-    public  String circuitBrakerFallback(Throwable t){
-        return "Circuit Braker Fallback " + t.getMessage();
+    public String retryFallback(GetOrderRequest request, Throwable t) {
+        return "RetryFallback" + t.getMessage();
     }
 
     @GetMapping
