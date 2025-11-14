@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "d00d6b6a-8345-4e70-813c-91fbc097542d",
+		"name": "MS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49800903",
+		"_collection_link": "https://mrtlptkn45-7147690.postman.co/workspace/Mert-Alptekin's-Workspace~6c92867a-1f77-4e18-8c16-1fe223c099fa/collection/49800903-d00d6b6a-8345-4e70-813c-91fbc097542d?action=share&source=collection_link&creator=49800903"
+	},
+	"item": [
+		{
+			"name": "OrderService",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5002/api/v1",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message to Kafka",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"code\":\"{{$guid}}\",\"productName\":\"{{$randomProductName}}\",\"quantity\":{{$randomInt}}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5002/api/v1/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProductService",
+			"item": [
+				{
+					"name": "Index",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":{{$randomInt}},\r\n    \"product\":\"{{$randomProductName}}\",\r\n    \"quantity\":5,\r\n    \"price\":{{$randomPrice}},\r\n    \"status\":\"submited\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:5001/api/v1",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FeignClient-Sample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"payload\":\"success\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5001/api/v1/openFeign",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"v1",
+								"openFeign"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Config Server",
+			"item": [
+				{
+					"name": "ConfigServerTest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9000/api/config",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"api",
+								"config"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gateway",
+			"item": [
+				{
+					"name": "Order Service",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5010/order-service/api/v1",
+							"host": [
+								"localhost"
+							],
+							"port": "5010",
+							"path": [
+								"order-service",
+								"api",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Service Test",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiJhYzAxYWIwNy04Y2RiLTRlZGYtOGY3NS1iMWY3OWFjZTEzMmMiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiYXVkIjoicmVhY3Qtb2lkYy1jbGllbnQiLCJuYmYiOjE3NjMxMjUwMzAsInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJvZmZsaW5lX2FjY2VzcyJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAiLCJleHAiOjE3NjMxMjUzMzAsImlhdCI6MTc2MzEyNTAzMCwianRpIjoiOTBkZGQ5OGUtMWFiNS00NmM3LWJjZWEtNDYxYmUwNTJjMzFjIn0.ZGiuPiDLHG5tyiI-WE5_hA4dN_VHqB5StvRUXS05qBGny3uaxYoE-sQIlcgkyGxidkE5vqUj8Rw6sBAZziiMGUySnItomwLPzzKmwBo_mGDNgla33BqqNUilx5sGuJc2IIw5FyzmTbZCU0sfwA9-BMMAhzjLrn_KndUV5uV5DJtU7mk2FEiNUuFwbjEjCpuiiE6V_tunqFYkngVgCR_6TSeEZRfk8pPGOR6oMWQ_qN0VdYdFROQtfVJJldgg-YSlnBFBkDoA9SIPqnbrS1ZifXLtf0RDTENoQg1vEhMHqjRKbT0uZwiaJG401_2iuIv8ihl9_k2V0dtjkdizp8x3AA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"payload\":\"success\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5010/product-service/api/v1/openFeign",
+							"host": [
+								"localhost"
+							],
+							"port": "5010",
+							"path": [
+								"product-service",
+								"api",
+								"v1",
+								"openFeign"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ELK",
+			"item": [
+				{
+					"name": "Index Oluşturma",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"settings\": {\r\n    \"number_of_shards\": 1,\r\n    \"number_of_replicas\": 1\r\n  },\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"service\": { \"type\": \"keyword\" },\r\n      \"level\": { \"type\": \"keyword\" },\r\n      \"message\": { \"type\": \"text\" },\r\n      \"timestamp\": { \"type\": \"date\" }\r\n    }\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/spring-boot-logs-2025.11.14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"spring-boot-logs-2025.11.14"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderSagaService",
+			"item": [
+				{
+					"name": "Saga Submit Order Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"code\":\"{{$guid}}\",\"orderId\":\"{{$guid}}\",\"quantity\":10}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5020/api/v1/saga/submit",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"v1",
+								"saga",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
