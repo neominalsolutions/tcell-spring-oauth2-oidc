@@ -31,16 +31,16 @@ public class ProductStockOutConsumer {
                OrderSubmittedEvent event=  objectMapper.readValue(message.getPayload(), OrderSubmittedEvent.class);
                System.out.println("Product Repository or Inventory Service  Update Stock" + event);
 
-               // Simüle edelim -> eğer quantity > 100 ise ozaman rejected, completed
-                if(event.quantity() > 100) {
+               // Simüle edelim -> eğer quantity > 500 ise ozaman rejected, completed
+                if(event.quantity() > 500) {
                     System.out.println("Stok Yetersiz -> " + event.quantity());
                     // hangi order olduğunu orderCode üzerinden ise takip ediyorum.
-                    var payload = new OutOfStockEvent(event.orderCode(),"Stok Yetersiz");
-                    streamBridge.send("OutOfStockEvent-out-0",payload);
+                    OutOfStockEvent payload01 = new OutOfStockEvent(event.orderCode(),"Stok Yetersiz");
+                    streamBridge.send("OutOfStockEvent-out-0",payload01);
                 } else {
                     System.out.println("Ürün Reserve edildi -> " + event.productName());
-                    var payload = new StockReservedEvent(event.orderCode(),event.productName());
-                    streamBridge.send("StockReserved-out-0",payload);
+                    StockReservedEvent payload02 = new StockReservedEvent(event.orderCode(),event.productName());
+                    streamBridge.send("StockReserved-out-0",payload02);
                 }
 
             } catch (JsonProcessingException e) {

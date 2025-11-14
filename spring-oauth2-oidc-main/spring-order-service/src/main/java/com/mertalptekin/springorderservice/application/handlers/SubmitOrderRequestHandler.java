@@ -7,15 +7,11 @@ import com.mertalptekin.springorderservice.application.requests.SubmitOrderReque
 import com.mertalptekin.springorderservice.application.responses.SubmitOrderResponse;
 import com.mertalptekin.springorderservice.domain.entity.Order;
 import com.mertalptekin.springorderservice.domain.service.IOrderService;
-import com.mertalptekin.springorderservice.infra.repository.IOrderRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class SubmitOrderRequestHandler implements ISubmitOrderRequestHandler{
@@ -31,17 +27,15 @@ public class SubmitOrderRequestHandler implements ISubmitOrderRequestHandler{
     }
 
     @Override
-    @Transactional
     public SubmitOrderResponse handle(SubmitOrderRequest req) throws JsonProcessingException {
 
         var entity = new Order();
         BeanUtils.copyProperties(req,entity);
-        entity.setCode(UUID.randomUUID().toString());
         entity.setStatus("submitted");
         orderService.save(entity);
 
         // Inventory Service Send Integration Event ->
-        var event = new OrderSubmittedEvent(req.orderCode(),"submitted",req.quantity(),req.productName());
+        var event = new OrderSubmittedEvent(req.code(),"submitted",req.quantity(),req.productName());
         var payload = objectMapper.writeValueAsString(event);
         // status fail olarak iletilirse
         Message<String> message = MessageBuilder.withPayload(payload).setHeader("eventType","orderSubmitted").build();

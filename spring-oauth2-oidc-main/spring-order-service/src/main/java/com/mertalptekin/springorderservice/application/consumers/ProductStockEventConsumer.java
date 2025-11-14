@@ -43,11 +43,10 @@ public class ProductStockEventConsumer {
                 Optional<Order> order = orderRepository.findByCode(event.orderCode());
 
                 if(order.isPresent()){
-                    order.get().setStatus("OutOfStock");
-                    orderRepository.save(order.get());
+                    var entity = order.get();
+                    entity.setStatus("outOfStock");
+                    orderRepository.save(entity);
                     emailSender.send("test",event.reason());
-                } else {
-                    throw  new EntityNotFoundException();
                 }
 
             } catch (JsonProcessingException e) {
@@ -70,11 +69,10 @@ public class ProductStockEventConsumer {
 
                 if(order.isPresent()){
                     // Stocktan düşülünce reserve edildi.
-                    order.get().setStatus("OrderCompleted");
-                    orderRepository.save(order.get());
+                    var entity = order.get();
+                    entity.setStatus("OrderCompleted");
+                    orderRepository.save(entity);
                     emailSender.send("test","Siparişiniz tamamlandı");
-                } else {
-                    throw  new EntityNotFoundException();
                 }
 
             } catch (JsonProcessingException e) {
