@@ -8,6 +8,9 @@ import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -18,6 +21,7 @@ import org.springframework.web.client.RestClient;
 
 import java.net.ConnectException;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -27,6 +31,8 @@ public class HomeController {
     private final DiscoveryClient discoveryClient;
     private final RestClient restClient;
     private final ProductService productService;
+    //  MDC Mapped Diagnostic Context -> Custom log propertyler Enrichment -> Logları zenginleştirme
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     public HomeController(DiscoveryClient discoveryClient, RestClient.Builder restClientBuilder, ProductService productService){
         this.discoveryClient = discoveryClient;
@@ -41,6 +47,11 @@ public class HomeController {
     @RateLimiter(name = "orderServiceRateLimiter",fallbackMethod = "rateLimiter")
     public ResponseEntity<String> openFeign(@RequestBody GetOrderRequest request) {
         var response = productService.GetOrderedProduct(request);
+        MDC.put("sessionId", UUID.randomUUID().toString());
+        // logger üstüne yerleştirmemiz lazım yoksa loglarda görünmüyor.
+        logger.info("OrderService OpenFeign");
+        MDC.clear();
+
         return  ResponseEntity.ok(response);
     }
 
