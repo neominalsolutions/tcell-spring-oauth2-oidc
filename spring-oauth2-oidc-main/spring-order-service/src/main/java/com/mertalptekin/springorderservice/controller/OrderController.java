@@ -1,6 +1,9 @@
 package com.mertalptekin.springorderservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mertalptekin.springorderservice.dtos.SubmitOrderRequest;
+import com.mertalptekin.springorderservice.events.OrderSubmittedEvent;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
@@ -16,16 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final StreamBridge streamBridge;
+    private final ObjectMapper objectMapper;
 
-    public OrderController(StreamBridge streamBridge){
+    public OrderController(StreamBridge streamBridge, ObjectMapper objectMapper){
         this.streamBridge = streamBridge;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping
-    public ResponseEntity<String> sendMessage(@RequestBody SubmitOrderRequest request){
+    public ResponseEntity<String> sendMessage(@RequestBody SubmitOrderRequest request) throws JsonProcessingException {
+
+        var event = new OrderSubmittedEvent(request.orderCode(),request.status());
+        var payload = objectMapper.writeValueAsString(event);
 
         // status fail olarak iletilirse
-        Message<String> message = MessageBuilder.withPayload(request.status()).setHeader("eventType","orderSubmitted").build();
+        Message<String> message = MessageBuilder.withPayload(payload).setHeader("eventType","orderSubmitted").build();
 
         // Kafkaya mesajımızı iletiyoruz
         boolean isSend =  streamBridge.send("orderSubmit-out-0",message);

@@ -1,6 +1,9 @@
 package com.mertalptekin.springorderservice.consumer;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mertalptekin.springorderservice.events.OrderSubmittedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -10,14 +13,25 @@ import java.util.function.Consumer;
 @Component
 public class SubmitOrderConsumer {
 
+    private final ObjectMapper objectMapper;
+
+    public SubmitOrderConsumer(ObjectMapper objectMapper){
+        this.objectMapper = objectMapper;
+    }
+
     @Bean
     public Consumer<Message<String>> stockOut(){
         return message -> {
             String payload = message.getPayload();
-            var Headers = message.getHeaders();
+            try {
+                var event = objectMapper.readValue(payload, OrderSubmittedEvent.class);
+                var Headers = message.getHeaders();
+                System.out.println("event-order-code" + event.orderCode());
+                System.out.println("stockOut "  + payload);
 
-            System.out.println("stockOut "  + payload);
-
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         };
     }
 
