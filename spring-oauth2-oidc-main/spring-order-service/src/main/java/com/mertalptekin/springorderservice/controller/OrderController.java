@@ -29,7 +29,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<String> sendMessage(@RequestBody SubmitOrderRequest request) throws JsonProcessingException {
 
-        var event = new OrderSubmittedEvent(request.orderCode(),request.status());
+        var event = new OrderSubmittedEvent(request.orderCode(),request.status(),10,"A Product");
         var payload = objectMapper.writeValueAsString(event);
 
         // status fail olarak iletilirse
