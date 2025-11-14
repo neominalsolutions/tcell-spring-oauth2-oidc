@@ -1,10 +1,8 @@
-package com.mertalptekin.springorderservice.controller;
+package com.mertalptekin.springorderservice.presentation.controller;
 
-import com.mertalptekin.springorderservice.dtos.GetOrderRequest;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+import com.mertalptekin.springorderservice.application.requests.GetOrderRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 
 @RestController
 @RequestMapping("api/v1")

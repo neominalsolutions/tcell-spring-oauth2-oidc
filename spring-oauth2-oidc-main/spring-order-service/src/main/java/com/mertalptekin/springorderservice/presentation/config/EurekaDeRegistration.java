@@ -1,4 +1,4 @@
-package com.mertalptekin.springorderservice.config;
+package com.mertalptekin.springorderservice.presentation.config;
 
 import com.netflix.discovery.EurekaClient;
 import jakarta.annotation.PreDestroy;

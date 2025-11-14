@@ -1,9 +1,9 @@
-package com.mertalptekin.springorderservice.consumer;
+package com.mertalptekin.springorderservice.application.consumers;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mertalptekin.springorderservice.events.OrderSubmittedEvent;
+import com.mertalptekin.springorderservice.application.events.OrderSubmittedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
