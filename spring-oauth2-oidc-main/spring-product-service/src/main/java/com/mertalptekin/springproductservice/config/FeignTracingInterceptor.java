@@ -21,6 +21,7 @@ public class FeignTracingInterceptor implements RequestInterceptor {
 
         var currentSpan = tracer.currentSpan();
         if (currentSpan != null) {
+            // b3 ile ms arası aynı trace id haberleşmek için diğer ms headerdan traceId ve spanıd değerlerini iletiyoruz. bunu iletmezsek istek devamı şeklinde görünmez.
             requestTemplate.header("b3", currentSpan.context().traceId() + "-" + currentSpan.context().spanId() + "-1");
         }
     }
