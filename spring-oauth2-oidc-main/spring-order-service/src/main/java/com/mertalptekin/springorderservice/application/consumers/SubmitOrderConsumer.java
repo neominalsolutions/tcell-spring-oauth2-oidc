@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
-//@Component
+@Component
 public class SubmitOrderConsumer {
 
     private final ObjectMapper objectMapper;
@@ -35,7 +35,7 @@ public class SubmitOrderConsumer {
         };
     }
 
-    //@Bean
+    @Bean
     public Consumer<Message<String>> doShipment(){
         return message -> {
             String payload = message.getPayload();
