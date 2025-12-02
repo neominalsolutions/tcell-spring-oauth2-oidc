@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Annotation profile for spring-oauth-server" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -15,15 +16,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="spring-order-service" />
         <module name="spring-resource-server" />
+        <module name="spring-cloud-admin" />
+        <module name="spring-product-service" />
         <module name="spring-oauth2-client" />
+        <module name="spring-config-server" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring-cloud-admin" options="-parameters" />
+      <module name="spring-config-server" options="-parameters" />
       <module name="spring-oauth-server" options="-parameters" />
       <module name="spring-oauth2-client" options="-parameters" />
+      <module name="spring-order-service" options="-parameters" />
+      <module name="spring-product-service" options="-parameters" />
       <module name="spring-resource-server" options="-parameters" />
     </option>
   </component>

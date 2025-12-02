@@ -7,6 +7,10 @@
         <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-oauth-server/pom.xml" />
         <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-oauth2-client/pom.xml" />
         <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-resource-server/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-product-service/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-order-service/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-oauth2-oidc-main/spring-cloud-admin/pom.xml" />
       </list>
     </option>
   </component>

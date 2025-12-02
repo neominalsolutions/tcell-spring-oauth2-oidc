@@ -7,7 +7,7 @@ spring:
   application:
     name: spring-oauth2-client
   profiles:
-    active: prod
+    active: dev
   cloud:
     config:
       uri: http://localhost:8085

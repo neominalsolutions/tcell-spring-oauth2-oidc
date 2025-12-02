@@ -24,7 +24,12 @@ public class SecurityConfig {
         // Spring Boot Admin Client, Admin Server’a POST /instances isteği atar.
         //Bu isteğin gövdesinde kendi bilgisini (url, metadata vs.) gönderir form üzerinden gönderim yaparke csrf ek olarak Request Verification Token bekler bu sebeple POST isteği başarısız olur. Bunu eklememiz gerekir.
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/assets/**","/login").permitAll().requestMatchers("/instances","/actuator/**").permitAll().anyRequest().authenticated()).formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
+                .authorizeHttpRequests((requests) ->
+                        requests.requestMatchers("/assets/**","/login")
+                                .permitAll()
+                        .requestMatchers("/instances","/actuator/**")
+                                .permitAll().anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
