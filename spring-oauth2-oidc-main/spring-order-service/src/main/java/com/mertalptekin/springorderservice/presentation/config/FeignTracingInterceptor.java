@@ -17,11 +17,13 @@ public class FeignTracingInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
 
+
         System.out.println("Feign Product Service Client Interceptor");
 
         var currentSpan = tracer.currentSpan();
         if (currentSpan != null) {
             requestTemplate.header("b3", currentSpan.context().traceId() + "-" + currentSpan.context().spanId() + "-1");
         }
+
     }
 }
