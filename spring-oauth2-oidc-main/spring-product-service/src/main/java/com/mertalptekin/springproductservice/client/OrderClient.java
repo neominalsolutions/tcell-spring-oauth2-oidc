@@ -16,3 +16,5 @@ public interface OrderClient {
 }
 
 // Spring Boot Application @EnableFeignClients
+
+// Gateway -> Product Service -> Order Service
